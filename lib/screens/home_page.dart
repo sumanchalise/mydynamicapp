@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+import '../model/content_model.dart';
+import '../network/api_services.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -21,10 +24,11 @@ class HomePage extends StatelessWidget {
           future: ApiServices.getContent(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              List<ContentModel> result = snapshot.data;
               return Padding(
                 padding: const EdgeInsets.all(20),
                 child: ListView.separated(
-                  itemCount: 10,
+                  itemCount: result.length,
                   separatorBuilder: (context, index) => SizedBox(
                     height: 10,
                   ),
@@ -36,6 +40,7 @@ class HomePage extends StatelessWidget {
                           height: 200,
                           width: double.infinity,
                           color: Colors.grey,
+                          child: Image.network(result[index].imageUrl!),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -56,11 +61,18 @@ class HomePage extends StatelessWidget {
                   },
                 ),
               );
-            }else if (snapshot.connectionState == ConnectionState.waiting) {
-              return center(
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
                 child: CircularProgressIndicator(),
-              )
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Container(
+                  child: Text("Err"),
+                ),
+              );
             }
+            return Container();
           }),
     );
   }

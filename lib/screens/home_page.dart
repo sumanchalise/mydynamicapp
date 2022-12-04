@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 import '../model/content_model.dart';
 import '../network/api_services.dart';
@@ -44,18 +45,19 @@ class HomePage extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text("title",
+                          child: Text(result[index].title!,
                               style: TextStyle(
                                 fontSize: 20,
                               )),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          child: Text("small description",
-                              style: TextStyle(
-                                fontSize: 16,
-                              )),
-                        )
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Html(data: result[index].shortDescription)
+                            // Text(result[index].shortDescription!,
+                            //     style: TextStyle(
+                            //       fontSize: 16,
+                            //     ),
+                            )
                       ],
                     );
                   },

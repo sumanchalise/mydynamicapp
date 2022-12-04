@@ -17,23 +17,51 @@ class HomePage extends StatelessWidget {
         ),
         backgroundColor: Colors.white,
       ),
-      body: ListView.separated(
-        itemCount: 10,
-        separatorBuilder: (context, index) => SizedBox(
-          height: 10,
-        ),
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              Container(
-                height: 200,
-                width: double.infinity,
-                color: Colors.grey,
-              ),
-            ],
-          );
-        },
-      ),
+      body: FutureBuilder(
+          future: ApiServices.getContent(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Padding(
+                padding: const EdgeInsets.all(20),
+                child: ListView.separated(
+                  itemCount: 10,
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: 10,
+                  ),
+                  itemBuilder: (context, index) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 200,
+                          width: double.infinity,
+                          color: Colors.grey,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text("title",
+                              style: TextStyle(
+                                fontSize: 20,
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: Text("small description",
+                              style: TextStyle(
+                                fontSize: 16,
+                              )),
+                        )
+                      ],
+                    );
+                  },
+                ),
+              );
+            }else if (snapshot.connectionState == ConnectionState.waiting) {
+              return center(
+                child: CircularProgressIndicator(),
+              )
+            }
+          }),
     );
   }
 }
